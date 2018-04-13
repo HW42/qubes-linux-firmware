@@ -401,6 +401,16 @@ sed -e 's/^/%%dir /' linux-firmware.dirs >> linux-firmware.files
 %dir %{_firmwarepath}
 %license WHENCE LICENCE.* LICENSE.*
 
+%post
+# Update initramfs only if was already generated; skip generating it
+# during system installation (will be done later anyway).
+if [ -f /boot/initramfs-$(uname -r).img ]; then
+    dracut -f --kver $(uname -r) /boot/initramfs-$(uname -r).img
+    if [ -d /boot/efi/EFI/qubes ]; then
+        cp /boot/initramfs-$(uname -r).img /boot/efi/EFI/qubes/
+    fi
+fi
+
 %changelog
 * Mon Apr 02 2018 Josh Boyer <jwboyer@fedoraproject.org> - 20180402-83.git8c1e439c
 - Latest upstream snapshot
