@@ -1,3 +1,7 @@
+%if 0%{?qubes_builder}
+%define _sourcedir %(pwd)
+%endif
+
 %global checkout 8c1e439c
 %global firmware_release 83
 
